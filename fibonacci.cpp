@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
 #include <iostream>
 using namespace std;
+#include <fstream>
+#define ll long long
+#define iose ios::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr)
+
 
 // IMPLEMENT FIBONACCI SERIES USING RECURSION
 int R_Fibonacci_Series(int num)
@@ -69,7 +73,18 @@ int M_Fibonacci_Series(int num)
 //--------------------------------------------------------------------------------------------------
 
 // IMPLEMENT FIBONACCI SERIES USING DYNAMIC PROGRAMMING
-int D_Fibonacci_Series(int num);
+int D_Fibonacci_Series(int num)
+{
+    if (num <= 1) return num;
+    vector<int> fib(num + 1);
+    fib[0] = 0;
+    fib[1] = 1;
+    for (int i = 2; i <= num; i++)
+    {
+        fib[i] = fib[i - 1] + fib[i - 2];
+    }
+    return fib[num];
+}
 
 
 int main() {
@@ -100,6 +115,14 @@ int main() {
                 cout <<"Enter the number: " << '\n';
                 cin >> fibNum;
                 result = M_Fibonacci_Series(fibNum);
+                cout << "The result is: " << result << '\n';
+                continue;
+            }
+            case 3:
+            {
+                cout <<"Enter the number: " << '\n';
+                cin >> fibNum;
+                result = D_Fibonacci_Series(fibNum);
                 cout << "The result is: " << result << '\n';
                 continue;
             }
