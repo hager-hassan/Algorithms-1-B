@@ -1,4 +1,3 @@
-
 #include <bits/stdc++.h>
 #include <iostream>
 using namespace std;
@@ -49,25 +48,26 @@ int I_Sequential_Search(t arr[] , int size , t key)
 
 // IMPLEMENT THE BINARY SEARCH RECURSIVELY
 template <class t>
-int R_Binary_Search(t arr[] , int low , int high , t key)
+int R_Binary_Search(t arr[] , t val ,int low , int high)
 {
-    if(high >= low)
+    int mid=low+((high-low)/2);
+    if (high<low)
     {
-        int middle =  (low + high)/2;
-
-        if(arr[middle] == key)
-        {
-            return middle;
-        }
-
-        if(arr[middle] > key)
-        {
-            return R_Binary_Search(arr , low , middle-1 , key);
-        }
-
-        return R_Binary_Search(arr , middle+1 , high , key);
+        return -1;
     }
-    return -1;
+    if (arr [mid]== val)
+    {
+        return mid;
+    }
+    if (val < arr[mid])
+    {
+        return R_Binary_Search(arr,val,low,mid-1);
+    }
+    if(val > arr[mid])
+    {
+        return R_Binary_Search(arr,val,mid+1,high);
+    }
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ int main() {
             {
                 cout << "Enter the key: " << '\n';
                 cin >> key;
-                int result = R_Binary_Search(sortedArr , 0 , arrSize-1 , key);
+                int result = R_Binary_Search(sortedArr , key ,0 , arrSize-1);
                 if (result != -1)
                 {
                     cout << "Key found at index: " << result << '\n';
