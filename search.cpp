@@ -107,7 +107,7 @@ int main() {
              << "2-Recursive Sequential Search."                  << '\n'
              << "3-Binary Search."                                << '\n'
              << "4-Recursive Binary Search."                      << '\n'
-             << "Press 0 to exit the program"                     << '\n';
+             << "Press 0 to exit the program."                     << '\n';
 
         cin >> optionNum;
 
