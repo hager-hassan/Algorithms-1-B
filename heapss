@@ -1,0 +1,326 @@
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+#include <bits/stdc++.h>
+using namespace std;
+
+class Heap {
+protected:
+    int* heap;
+    int capacity;
+    int size;
+
+
+public:
+    Heap(int cap): capacity(cap), size(0) {
+        heap = new int[capacity];
+    }
+
+    void display() {
+        for (int i = 0; i < size; i++) {
+            cout << heap[i] << " ";
+        }
+        cout << "\n";
+    }
+    void sortheap();
+};
+
+class Priority_Queue{
+private:
+    vector<pair<int, int>> queue;
+
+    // after insertion
+    void heapifyUp(int index)
+    {
+        while (index > 0)
+        {
+            int parent = (index - 1) / 2;
+            if (queue[index].second > queue[parent].second) // compare child with parent
+            {
+                swap(queue[index], queue[parent]);
+                index = parent; // move to parent to make sure
+            }
+            else
+                break;
+        }
+    }
+
+    // after extraction
+    void heapifyDown(int index)
+    {
+        int size = queue.size();
+        while (true)
+        {
+            int left = 2 * index + 1 , right = 2 * index +2;
+            int largest = index;
+
+            if (left < size && queue[left].second > queue[largest].second)
+            {
+                largest = left;
+            }
+
+            if (right < size && queue[right].second > queue[largest].second)
+            {
+                largest = right;
+            }
+
+            if(largest == index)
+                break;
+
+            swap(queue[index], queue[largest]);
+            index = largest; // update index location to make sure
+        }
+    }
+
+public:
+    void insert(int value, int priority)
+    {
+        queue.emplace_back(value, priority);
+        heapifyUp(queue.size() - 1);
+    }
+
+    void deleteMax()
+    {
+        if(queue.empty())
+        {
+            cout << "QUEUE IS EMPTY." << '\n';
+        }
+        else
+        {
+            queue[0] = queue.back(); // move last element to root
+            queue.pop_back();
+
+            heapifyDown(0);
+        }
+    }
+
+    int getMax()
+    {
+        if(queue.empty())
+        {
+            cout << "QUEUE IS EMPTY." << '\n';
+            return 0;
+        }
+        else
+        {
+            return queue[0].first;
+        }
+    }
+
+    void print()
+    {
+        if(!queue.empty())
+        {
+            for (const auto& element : queue)
+            {
+                cout << "(" << element.first << ", " << element.second << ")" << '\n';
+            }
+        }
+    }
+
+};
+
+class MaxHeap: public Heap{
+private:
+    void heapifyup(int index) {
+        while (index > 0) {
+            int root = (index - 1) / 2;
+            if (heap[index] > heap[root]) {
+                swap(heap[index], heap[root]);
+                index = root;
+            } else {
+                break;
+            }
+        }
+    }
+    int extractMax() {
+        if (size == 0) {
+             cout<<"Heap is empty\n";
+        }
+        int maxValue = heap[0];
+        swap( heap[0] , heap[size - 1]);
+        heapifyup(0);
+        return maxValue;
+    }
+    void maxHeap()
+    {
+        for (int i = size / 2 - 1; i >= 0; i--)
+            heapifyup(i);
+    }
+public:
+    void insert(int value) {
+        if (size >= capacity) {
+            throw runtime_error("Heap is full");
+        }
+        heap[size] = value;
+        size++;
+        heapifyup(size-1);
+    }
+    void sortheap(){
+        maxHeap();
+        for (int i = size - 1; i >= 0; i--) {
+            cout<<extractMax()<<" ";
+        }
+    }
+};
+
+class MinHeap:public Heap{
+private:
+    void heapifydown(int index) {
+        while (index < size) {
+            int leftChild = 2 * index + 1;
+            int rightChild = 2 * index + 2;
+            int smallest = index;
+
+            if (leftChild < size && heap[leftChild] < heap[smallest]) {
+                smallest = leftChild;
+            }
+            if (rightChild < size && heap[rightChild] < heap[smallest]) {
+                smallest = rightChild;
+            }
+            if (smallest != index) {
+                swap(heap[index], heap[smallest]);
+                index = smallest;
+            } else {
+                break;
+            }
+        }
+    }
+    int extractMin() {
+        if (size == 0) {
+            throw runtime_error("Heap is empty");
+        }
+        int minValue = heap[0];
+        swap( heap[0] , heap[size - 1]);
+        heapifydown(0);
+        return minValue;
+    }
+    void minHeap()
+    {
+        for (int i = size / 2 - 1; i >= 0; i--)
+            heapifydown( i);
+    }
+public:
+    void insert(int value) {
+        if (size >= capacity) {
+            throw runtime_error("Heap is full");
+        }
+        heap[size] = value;
+        size++;
+        heapifydown(size-1);
+    }
+    void sortheap(){
+        minHeap();
+        for (int i = size - 1; i >= 0; i--) {
+            cout<<extractMin()<<" ";
+        }
+    }
+};
+
+int main(){
+
+//    int num = 0 , priority = 0;
+//    int x=10;
+//    while (x != 0)
+//    {
+//        cout<<"Do you want 1.Max Heap   2.Priority Queue   3.Min Heap   0.To exit\n";
+//       cin>>x;
+//        if (x==0)break;
+//        if (x==1){
+//            cout<<"Enter size of max heap\n";
+//            int y;cin>>y;
+//
+//            while (y) { MaxHeap* mheap =new MaxHeap(y);
+//            cout<<"Choose  1.Insert   2.sort   3.Display   0.To exit\n";
+//             cin>>y;
+//            if (y==1){ int check=5;
+//                while (check){ int num;
+//                    cout<<"Enter number\n";
+//                    cin>>num;
+//                    mheap->insert(num);
+//                    cout<<"If you don't insert again enter 0 else enter 1\n";
+//                    cin>>check;
+//                }
+//
+//            }
+//            else if (x==2){
+//                mheap->sortheap();
+//            }
+//            else if (x==3){
+//                mheap->display();
+//            }
+//            }
+//        }
+//        else if (x==2){int optionNum = 100;
+//            Priority_Queue pq ;
+//            cout << "Enter the number for the option you want: " << '\n'
+//                 << "1-Insert element."                          << '\n'
+//                 << "2-Delete max element."                      << '\n'
+//                 << "3-Get max element."                         << '\n'
+//                 << "4-Print elements."                          << '\n'
+//                 << "Press 0 to exit the program."               << '\n';
+//
+//            cin >> optionNum;
+//
+//            switch (optionNum)
+//            {
+//                case 1:
+//                {
+//                    cout << "Please enter the number and its priority:" << '\n';
+//                    cin >> num >> priority;
+//                    pq.insert(num , priority);
+//                    continue;
+//                }
+//                case 2:
+//                {
+//                    pq.deleteMax();
+//                    continue;
+//                }
+//                case 3:
+//                {
+//                    int max = pq.getMax();
+//                    cout << "Max element is: " << max <<'\n';
+//                    continue;
+//                }
+//                case 4:
+//                {
+//                    pq.print();
+//                    continue;
+//                }
+//                case 0:
+//                    cout << "EXITING PROGRAM..." << '\n';
+//                    break;
+//                default:
+//                    cout << "INVALID OPTION :(" << '\n';
+//                    continue;
+//            }
+//
+//        }
+//        else if (x==3){
+//            cout<<"Enter size of max heap\n";
+//            int y;cin>>y;
+//            MinHeap* mheap =new MinHeap(y);
+//            while (y) {
+//                cout << "Choose 1. Insert 2.sort 3.Display  0.To exit\n";
+//                cin >> y;
+//                if (y == 1) {int check=1;
+//                    while (check) {
+//                        cout << "Enter number\n";int num;
+//                        cin >> num;
+//                        mheap->insert(num);
+//                        cout << "If you don't insert again enter 0 else enter 1\n";
+//                        cin >> check;
+//                    }
+//                } else if (x == 2) {
+//                    mheap->sortheap();
+//                }
+//                else if (x == 3) {
+//                    mheap->display();
+//                }
+//            }
+//        }
+//
+//    }
+
+    return 0;
+}
